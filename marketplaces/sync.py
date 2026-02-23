@@ -1,12 +1,6 @@
 import logging
-import os
-import django
 from decimal import Decimal
 from typing import List, Dict, Optional
-
-# Configure Django BEFORE importing models
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_scrape_proj.settings')
-django.setup()
 
 from django.db import transaction, IntegrityError
 from django.conf import settings
@@ -118,9 +112,9 @@ class ServicesSynchronizer:
         return None
 
     def _bulk_process_items(
-        self,
-        products_list: List[dict],
-        result: SyncResult
+            self,
+            products_list: List[dict],
+            result: SyncResult
     ) -> None:
         """
         Process products in bulk: create/update products and offers.
@@ -262,29 +256,3 @@ class ServicesSynchronizer:
             logger.error(f"Unexpected error during sync: {e}", exc_info=True)
             result.errors.append(f"Unexpected error: {e}")
             raise
-
-
-def main():
-    """Entry point for running synchronization as a script."""
-
-
-    from marketplaces.services.fakestoreapi import FakeStoreApiMarketClient
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-
-    market_client = FakeStoreApiMarketClient()
-    synchronizer = ServicesSynchronizer(market_client)
-
-    try:
-        result = synchronizer.sync_all()
-        logger.info(f"Synchronization result: {result}")
-    except Exception as e:
-        logger.error(f"Synchronization failed: {e}")
-        raise
-
-
-if __name__ == "__main__":
-    main()
