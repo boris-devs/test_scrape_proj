@@ -193,12 +193,18 @@ class ServicesSynchronizer:
             if ext_id not in existing_offers:
                 product = products_map.get(ext_id)
                 if product:
-                    to_create.append(
-                        ProductOffer(
+                    new_offer = ProductOffer(
                             product=product,
                             external_id=ext_id,
                             current_price_usd=new_price,
                             store_name=self.store_name
+                        )
+                    to_create.append(new_offer)
+
+                    price_history.append(
+                        PriceHistory(
+                            store_product=new_offer,
+                            price_usd=new_price
                         )
                     )
                 else:
