@@ -8,8 +8,8 @@ from marketplaces.sync import ServicesSynchronizer
 logger = get_task_logger(__name__)
 
 MARKET_CLIENTS = [
-    DummyJsonMarketClient,
-    FakeStoreApiMarketClient
+    FakeStoreApiMarketClient,
+    DummyJsonMarketClient
 ]
 
 
